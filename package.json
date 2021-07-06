@@ -1,0 +1,25 @@
+{
+  "name": "git-note-taking",
+  "description": "- [ ] create automatic index in Folders - [ ] create automatic tag index - [ ] OCR for documents",
+  "version": "0.0.0",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "./node_modules/typescript/bin/tsc && node dist/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i5heu/Git-Note-Taking.git"
+  },
+  "author": "",
+  "license": "AGLP-3.0",
+  "bugs": {
+    "url": "https://github.com/i5heu/Git-Note-Taking/issues"
+  },
+  "homepage": "https://github.com/i5heu/Git-Note-Taking#readme",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "@types/node": "^16.0.0"
+  }
+}
