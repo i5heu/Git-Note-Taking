@@ -5,6 +5,7 @@
 - [ ] create automatic index in Folders
 - [ ] create automatic tag index
 - [ ] OCR for documents
+- [ ] commit automatic daly jornal
 
 ## PAHSE 2 Backup
 - [ ] likely a Github Action thingy too   

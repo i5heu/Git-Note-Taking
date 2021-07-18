@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  schedule:    
+    - cron: "1 0 * * *"
+
+
+  # Allows you to run this workflow manually from the Actions tab
+  #workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  publish:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: check for changes
+        run: git status
+        
+      - name: Set current date as env variable
+        run: echo "NOW=$(date --date='next day' +'%d-%m-%Y')" >> $GITHUB_ENV
+      - name: Set current date as env variable
+        run: echo "YEAR=$(date --date='next day' +'%Y')" >> $GITHUB_ENV
+        
+      - name: create new file
+        run: |
+          touch Tagebuch/${YEAR}/${NOW}.md
+          cat Tagebuch/template.md > Tagebuch/${YEAR}/${NOW}.md
+          
+      - name: git add
+        run: git add Tagebuch/${YEAR}/${NOW}.md
+        
+      - name: git commit
+        run: |
+          git config --local user.email "i5heu/test[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Add Jornal for ${NOW}"
+        
+      - name: git push
+        run: git push
