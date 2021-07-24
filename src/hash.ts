@@ -34,6 +34,7 @@ export class Hash {
 
     // get tags from subFiles of folder and save then in tag parameter
     for (const subItem of chunk.subItems) {
+      // ignore subfolders
       if (
         !fs.lstatSync(subItem.path).isDirectory() &&
         subItem.path.includes(".md")
@@ -45,16 +46,18 @@ export class Hash {
           const array = [...str.matchAll(regex1)];
           const availTags = [];
 
-          for (const result of array) {
-            if (result && result[1]) {
-              if (availTags.includes(result[1])) continue;
+          // iterate over all tags and save them in chunk.tags
+          for (const regExResult of array) {
+            if (regExResult && regExResult[1]) {
+              // prevent duplicate tags
+              if (availTags.includes(regExResult[1])) continue;
 
               chunk.tags.push({
-                tag: result[1],
+                tag: regExResult[1],
                 path: subItem.path.replace(chunk.path + "/", ""),
               });
 
-              availTags.push(result[1]);
+              availTags.push(regExResult[1]);
             }
           }
         } catch (error) {
@@ -62,16 +65,13 @@ export class Hash {
         }
       }
 
+      // concat tags from subItems into chunk
       if (subItem.tags) {
         chunk.tags.push.apply(chunk.tags, subItem.tags);
       }
     }
 
     return chunk;
-  }
-
-  async globalIndex(chunk) {
-    console.log("INDEX");
   }
 }
 
