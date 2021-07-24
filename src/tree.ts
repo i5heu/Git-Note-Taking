@@ -45,9 +45,10 @@ export class Tree {
     }
   }
 
-  async iterateOverTree(itemFunction: VoidFunction) {
+  async iterateOverTree(itemFunction: (chunk: any) => Promise<any>) {
     await this.subFolderIterator(
       {
+        root: true,
         directory: true,
         subItems: this.itemTree,
       },
@@ -55,13 +56,13 @@ export class Tree {
     );
   }
 
-  async subFolderIterator(chunk, itemFunction: VoidFunction) {
+  async subFolderIterator(chunk, itemFunction: (chunk: any) => Promise<any>) {
     if (chunk.directory) {
       for (const chunky of chunk.subItems) {
         await this.subFolderIterator(chunky, itemFunction);
       }
 
-      await itemFunction();
+      await itemFunction(chunk);
     }
   }
 }
