@@ -7,27 +7,29 @@ const fsPromises = fs.promises;
 const util = require("util");
 
 export class Hash {
-  //   static async uiCreator(hashIndex: any) {
-  //     let hashText = "";
+  static async uiCreator(chunk: any) {
+    let hashText = "";
 
-  //     if (hashIndex.tags) {
-  //       for (const tagObj of hashIndex.tags) {
-  //         console.log(tagObj.path);
-  //         hashText += `
-  // [${tagObj.tag} - ${tagObj.path}](${tagObj.path})
-  // `;
-  //       }
-  //     }
+    if (chunk.tags) {
+      for (const tagObj of chunk.tags) {
+        hashText += `[${tagObj.tag} - ${tagObj.path}](${tagObj.path})\n`;
+      }
+    }
 
-  //     const index = `
-  // # Index
+    if (!Array.isArray(chunk.indexString)) {
+      chunk.indexString = [];
+    }
 
-  // ## Hashes
-  // ${hashText}
-  // `;
+    if (hashText !== "") {
+      const index = `
+## Hashes
+${hashText}
+      `;
 
-  //     fs.writeFile(chunk.path + "/AA_INDEX.auto.md", index, () => {});
-  //   }
+      chunk.indexString.push(index);
+      fs.writeFile(chunk.path + "/AA_INDEX.auto.md", index, () => {});
+    }
+  }
 
   static async hashIndex(chunk) {
     chunk.tags = [];
