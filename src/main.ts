@@ -16,8 +16,6 @@ async function main() {
     await Hash.hashIndex(chunk);
     await Hash.uiCreator(chunk);
 
-    console.log(chunk);
-
     if (chunk.indexString.length > 0) {
       fs.writeFile(
         chunk.path + "/AA_INDEX.auto.md",

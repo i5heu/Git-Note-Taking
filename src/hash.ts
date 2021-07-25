@@ -24,7 +24,7 @@ export class Hash {
       const index = `
 ## Hashes
 ${hashText}
-      `;
+`;
 
       chunk.indexString.push(index);
       fs.writeFile(chunk.path + "/AA_INDEX.auto.md", index, () => {});
