@@ -26,7 +26,7 @@ jobs:
         run: git status
         
       - name: Set current date as env variable
-        run: echo "NOW=$(date --date='next day' +'%d-%m-%Y')" >> $GITHUB_ENV
+        run: echo "NOW=$(date --date='next day' +'%Y-%m-%d')" >> $GITHUB_ENV
       - name: Set current date as env variable
         run: echo "YEAR=$(date --date='next day' +'%Y')" >> $GITHUB_ENV
         
