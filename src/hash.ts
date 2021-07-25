@@ -69,8 +69,14 @@ ${hashText}
 
       // concat tags from subItems into chunk
       if (subItem.tags) {
-        chunk.tags.push.apply(chunk.tags, subItem.tags);
+        chunk.tags.push.apply(chunk.tags , subItem.tags);
       }
+
+      chunk.tags.sort((a, b) => {
+        if (a.tag < b.tag) return -1;
+        if (a.tag > b.tag) return 1;
+        return 0;
+      });
     }
 
     return chunk;
