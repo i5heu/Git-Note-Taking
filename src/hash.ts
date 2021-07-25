@@ -69,6 +69,7 @@ ${hashText}
 
       // concat tags from subItems into chunk
       if (subItem.tags) {
+        // TODO fix problem with relative paths
         chunk.tags.push.apply(chunk.tags , subItem.tags);
       }
 
