@@ -5,6 +5,7 @@ export class GitManager {
 
     constructor(directoryPath, onlyPull = false) {
         this.rootPath = directoryPath;
+        console.log("BEGIN OF GIT-SERVER COMMUNICATION");
 
         if (onlyPull == false)
             try {
@@ -16,6 +17,8 @@ export class GitManager {
 
         this.pull();
         if (onlyPull == false) this.push();
+
+        console.log("END OF GIT-SERVER COMMUNICATION");
 
         if (onlyPull == false) global.running = false;
     }

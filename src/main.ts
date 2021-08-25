@@ -8,7 +8,7 @@ const fsPromises = fs.promises;
 const util = require("util");
 const http = require("http");
 
-const directoryPath = path.join(__dirname, "../../Git-Note-Taking-Test");
+const directoryPath = path.join(__dirname, "../../ARCHIVE");
 
 async function main() {
   try {
