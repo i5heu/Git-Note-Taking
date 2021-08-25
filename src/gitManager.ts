@@ -27,9 +27,9 @@ export class GitManager {
         console.log("COMMIT--->>", execSync(`cd ${this.rootPath}  && git commit -am "GitBot"`, { encoding: 'utf8' }));
     }
     pull() {
-        console.log(execSync(`cd ${this.rootPath}  && git pull -X theirs`, { encoding: 'utf8' }));
+        console.log("PULL--->>",execSync(`cd ${this.rootPath}  && git pull -X theirs`, { encoding: 'utf8' }));
     }
     push() {
-        console.log(execSync(`cd ${this.rootPath}  && git push`, { encoding: 'utf8' }));
+        console.log("PUSH--->>",execSync(`cd ${this.rootPath}  && git push`, { encoding: 'utf8' }));
     }
 }
