@@ -69,7 +69,7 @@ function loop() {
       }
     }
     loop();
-  }, 120000);
+  }, 300000);
 }
 
 function Start() {
