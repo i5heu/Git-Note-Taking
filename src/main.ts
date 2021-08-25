@@ -9,6 +9,7 @@ const util = require("util");
 const http = require("http");
 
 const directoryPath = path.join(__dirname, "../../ARCHIVE");
+console.log("directoryPath", directoryPath);
 
 async function main() {
   try {
