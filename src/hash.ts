@@ -45,7 +45,6 @@ ${hashText}
           var data = fs.readFileSync(subItem.path, "utf8");
           const regex1 = RegExp("#([0-9a-zA-z_-]{2,30})", "g");
           const str = data.toString();
-          console.log("str-->", str);
           const array = [...str.matchAll(regex1)];
           const availTags = [];
 
