@@ -4,19 +4,25 @@ import { Hash } from "./hash.js";
 import { Tree } from "./tree.js";
 import fs from "fs";
 import { GitManager } from "./gitManager.js";
+import Helper from "./helper";
+import { createMarkdownArrayTable, createMarkdownObjectTable } from 'parse-markdown-table';
 const fsPromises = fs.promises;
 const util = require("util");
 const http = require("http");
+const tablemark = require('tablemark');
 
-const directoryPath = path.join(__dirname, "../../ARCHIVE");
+const devMode = true;
+
+const directoryPath = path.join(__dirname, "../../Git-Note-Taking-Test");
 console.log("directoryPath", directoryPath);
 
 async function main() {
-  try {
-    await new GitManager(directoryPath, true);
-  } catch (error) {
-    console.error(error);
-  }
+  if (!devMode)
+    try {
+      await new GitManager(directoryPath, true);
+    } catch (error) {
+      console.error(error);
+    }
 
   const tree = new Tree(directoryPath);
   await tree.prepare();
@@ -39,6 +45,11 @@ async function main() {
         var data = fs.readFileSync(script.path, "utf8");
         const str = data.toString();
         try {
+          const findMarkdownTable = Helper.findMarkdownTable;
+          const getContentOfFile = Helper.getContentOfFile;
+          
+          const md = { tablemark , createMarkdownArrayTable, createMarkdownObjectTable };
+
           eval(str);
         } catch (error) {
           console.error("script.path:", script.path, "\n", error);
@@ -48,9 +59,10 @@ async function main() {
   });
 
   // console.log(util.inspect(queue, {showHidden: false, depth: null}))
-  setTimeout(async () => {
-    await new GitManager(directoryPath);
-  }, 10000);
+  if (!devMode)
+    setTimeout(async () => {
+      await new GitManager(directoryPath);
+    }, 10000);
 }
 
 main();
@@ -76,14 +88,14 @@ function Start() {
   loop();
 }
 
-Start();
+if (!devMode) Start();
 
 // for webhook
 const host = '0.0.0.0';
 const port = 80;
 
 const requestListener = async function (req, res) {
-  
+
   if (global.running == false) {
     global.running = true;
     try {
@@ -102,7 +114,9 @@ const requestListener = async function (req, res) {
 
 };
 
-const server = http.createServer(requestListener);
-server.listen(port, host, () => {
-  console.log(`Server is running on http://${host}:${port}`);
-});
+if (!devMode) {
+  const server = http.createServer(requestListener);
+  server.listen(port, host, () => {
+    console.log(`Server is running on http://${host}:${port}`);
+  });
+}

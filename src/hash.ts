@@ -3,8 +3,7 @@ import fs from "fs";
 import { createUnzip } from "zlib";
 import { match } from "assert";
 const fsPromises = fs.promises;
-
-const util = require("util");
+import util from "util";
 
 export class Hash {
   static async uiCreator(chunk: any) {

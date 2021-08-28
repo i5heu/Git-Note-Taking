@@ -1,4 +1,4 @@
-import Helper from "./helper.js";
+import Helper from "./helper";
 import fs from "fs";
 import path from "path";
 const fsPromises = fs.promises;
