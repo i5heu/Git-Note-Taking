@@ -37,4 +37,11 @@ export default class Helper {
   static async getContentOfFile(path: string) {
     return fs.readFileSync(path, "utf8");
   }
+
+  static removeExcessWhitespace(string) {
+    while (string.indexOf("  ") > -1) {
+      string = string.replace("  ", " ");
+    }
+    return string;
+  }
 }

@@ -6,6 +6,7 @@ import fs from "fs";
 import { GitManager } from "./gitManager.js";
 import Helper from "./helper";
 import { createMarkdownArrayTable, createMarkdownObjectTable } from 'parse-markdown-table';
+import { join } from "path/posix";
 const fsPromises = fs.promises;
 const util = require("util");
 const http = require("http");
@@ -47,8 +48,8 @@ async function main() {
         try {
           const findMarkdownTable = Helper.findMarkdownTable;
           const getContentOfFile = Helper.getContentOfFile;
-          
-          const md = { tablemark , createMarkdownArrayTable, createMarkdownObjectTable };
+
+          const md = { tablemark, createMarkdownArrayTable, createMarkdownObjectTable };
 
           eval(str);
         } catch (error) {
@@ -92,14 +93,56 @@ if (!devMode) Start();
 
 // for webhook
 const host = '0.0.0.0';
-const port = 80;
+let port = 80;
+const devPort = 8080;
+if (devMode) port = devPort;
 
 const requestListener = async function (req, res) {
-
   if (global.running == false) {
-    global.running = true;
     try {
-      await main();
+      if (req.method == "GET") {
+        console.log("HIT GET");
+        global.running = true;
+        await main();
+        global.running = false;
+      } else if (req.method == "POST") {
+        console.log("HIT POST");
+        if (req.headers.key != "12345") {
+          console.log("HIT AUTH NOT OK");
+
+          res.writeHead(401);
+          res.end("Unauthorized");
+          return;
+        }
+        if (!devMode)
+          try {
+            await new GitManager(directoryPath, true);
+          } catch (error) {
+            console.error(error);
+          }
+
+        const body = await getBody(req);
+        console.log("body:", body);
+        if (typeof body == "string") {
+          const bodyClean = Helper.removeExcessWhitespace(body.trim().replace('\t', ' ').replace(/(\r\n|\n|\r)/gm, "").replace("  ", ""));
+          fs.appendFile(
+            directoryPath + "/microMood.data",
+            bodyClean + "\n",
+            () => { }
+          );
+        } else {
+          throw new Error("Error: body is not a string");
+        }
+
+        if (!devMode)
+          try {
+            await new GitManager(directoryPath, false);
+          } catch (error) {
+            console.error(error);
+          }
+      } else {
+        console.log("condition is false");
+      }
     } catch (error) {
       global.running = false;
       console.error(error);
@@ -114,9 +157,27 @@ const requestListener = async function (req, res) {
 
 };
 
-if (!devMode) {
+if (true || !devMode) {
   const server = http.createServer(requestListener);
   server.listen(port, host, () => {
     console.log(`Server is running on http://${host}:${port}`);
+  });
+}
+
+async function getBody(req) {
+  return new Promise((resolve, reject) => {
+    let data = [];
+    req.on('data', (chunk) => {
+      data.push(chunk);
+    });
+
+    req.on('end', () => {
+      resolve(data.join());
+    });
+
+    req.on('error', (err) => {
+      throw new Error("Error: " + err)
+      resolve(false);
+    });
   });
 }
